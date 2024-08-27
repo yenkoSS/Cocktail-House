@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap");
+
+body {
+  font-family: "Architects Daughter", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.row {
+  row-gap: 20px;
+}
+
+.btn-minimal {
+  color: black;
+  font-size: 30px;
+  background-color: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.295);
+}
+
+.btn-minimal:active {
+  transform: scale(0.9);
+}
+
+.pangolin-regular {
+  font-family: "Pangolin", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 25px;
+}
+
+.sedgwick-ave-display-regular {
+  font-family: "Sedgwick Ave Display", cursive;
+  font-weight: 500;
+  font-style: normal;
+  font-size: 70px;
+  letter-spacing: 3px;
+}
+
+.indie-flower-regular {
+  font-family: "Indie Flower", cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 40px;
+}
+.text-custom {
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+@media screen and (max-width: 992px) {
+  .sedgwick-ave-display-regular {
+    font-size: 60px;
+  }
+
+  .indie-flower-regular {
+    font-size: 30px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .sedgwick-ave-display-regular {
+    font-size: 50px;
+  }
+
+  .indie-flower-regular {
+    font-size: 25px;
+  }
+
+  .container {
+    width: 55rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .sedgwick-ave-display-regular {
+    font-size: 40px;
+  }
+
+  .indie-flower-regular {
+    font-size: 15px;
+  }
+}
