@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/cocktailhouse/static/css/main.f4cd536e.css",
+    "main.js": "/cocktailhouse/static/js/main.e5b0b836.js",
+    "index.html": "/cocktailhouse/index.html",
+    "main.f4cd536e.css.map": "/cocktailhouse/static/css/main.f4cd536e.css.map",
+    "main.e5b0b836.js.map": "/cocktailhouse/static/js/main.e5b0b836.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f4cd536e.css",
+    "static/js/main.e5b0b836.js"
+  ]
+}
