@@ -6,37 +6,75 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import "./App.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "fetchingData": {
+      return {
+        ...state,
+        status: "loadingData",
+      };
+    }
+
+    case "dataFetched": {
+      return { ...state, status: "dataLoaded", data: action.payload };
+    }
+
+    case "error": {
+      return { ...state, status: "error" };
+    }
+
+    case "setQuery": {
+      return { ...state, query: action.payload };
+    }
+
+    case "noResults": {
+      return { ...state, status: "noResults" };
+    }
+
+    default:
+      console.log("Working.");
+  }
+}
 
 export default function App() {
-  const [value, setValue] = useState("");
-  const [data, setData] = useState({});
-  const [loading, setLoading] = useState(false);
   const triggerEffect = useRef(false);
+  const [state, dispatch] = useReducer(reducer, {
+    status: "appLoaded",
+    query: "",
+    data: {},
+  });
 
   useEffect(() => {
     if (triggerEffect.current) {
       async function fetchData() {
-        setLoading(true);
-        const req = await fetch(
-          `https://api.api-ninjas.com/v1/cocktail?name=${value}`,
-          {
-            headers: {
-              "X-Api-Key": "epM7i7XJzbQKGAluAgECow==2VC0rmqrQMgOobod",
-            },
-          }
-        );
+        try {
+          dispatch({ type: "fetchingData" });
+          const req = await fetch(
+            `https://api.api-ninjas.com/v1/cocktail?name=${state.query}`,
+            {
+              headers: {
+                "X-Api-Key": "epM7i7XJzbQKGAluAgECow==2VC0rmqrQMgOobod",
+              },
+            }
+          );
 
-        const res = await req.json();
-        setData(res);
-        setLoading(false);
+          const data = await req.json();
+          dispatch({ type: "dataFetched", payload: data });
+          if (data.length === 0) {
+            dispatch({ type: "noResults" });
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
       fetchData();
     } else {
       triggerEffect.current = true;
       return;
     }
-  }, [value]);
+  }, [state.query]);
 
   function handleSetValue(e) {
     e.preventDefault();
@@ -44,7 +82,7 @@ export default function App() {
     if (!inputValue) {
       return;
     }
-    setValue(e.target[0].value);
+    dispatch({ type: "setQuery", payload: inputValue });
   }
 
   return (
@@ -71,15 +109,26 @@ export default function App() {
               variant="dark"
               type="submit"
             >
-              Submit
+              Search
             </Button>
           </Form>
         </Col>
       </Row>
 
-      {data.length > 0 ? (
-        data.map((item) => (
-          <Row className="mt-5">
+      <Row className="mt-5 d-flex flex-column">
+        {state.status === "loadingData" && (
+          <Col className="d-flex flex-direction-column justify-content-center">
+            <div className="loader"></div>
+          </Col>
+        )}
+        {state.status === "noResults" && (
+          <Col className="d-flex flex-direction-column justify-content-center">
+            <p className="text-custom mt-5">No results found.</p>
+          </Col>
+        )}
+
+        {state.status === "dataLoaded" &&
+          state.data.map((item) => (
             <Col className="d-flex flex-direction-column justify-content-center">
               <Card style={{ width: "30rem", height: "100%" }}>
                 <Card.Body>
@@ -95,11 +144,8 @@ export default function App() {
                 </ListGroup>
               </Card>
             </Col>
-          </Row>
-        ))
-      ) : (
-        <p className="text-custom mt-5">No results found.</p>
-      )}
+          ))}
+      </Row>
     </Container>
   );
 }
